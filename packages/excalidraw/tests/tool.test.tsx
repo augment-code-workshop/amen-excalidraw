@@ -125,6 +125,33 @@ describe("findShapeByKey()", () => {
   });
 });
 
+describe("main toolbar", () => {
+  it("groups eraser next to selection before the drawing tools", async () => {
+    await render(<Excalidraw />);
+
+    const toolbarTools = Array.from(
+      GlobalTestState.renderResult.container.querySelectorAll(
+        '.App-toolbar [data-testid^="toolbar-"]',
+      ),
+      (element) => element.getAttribute("data-testid"),
+    ).filter((testId) => testId !== "toolbar-lock");
+
+    expect(toolbarTools).toEqual([
+      "toolbar-hand",
+      "toolbar-selection",
+      "toolbar-eraser",
+      "toolbar-rectangle",
+      "toolbar-diamond",
+      "toolbar-ellipse",
+      "toolbar-arrow",
+      "toolbar-line",
+      "toolbar-freedraw",
+      "toolbar-text",
+      "toolbar-image",
+    ]);
+  });
+});
+
 describe("props.activeTool (forced tool)", () => {
   const h = window.h;
   const mouse = new Pointer("mouse");
