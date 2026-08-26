@@ -33,6 +33,7 @@ import {
   bucketFillIcon,
   mermaidLogoIcon,
   MagicIcon,
+  TrashIcon,
 } from "./icons";
 
 import "./ToolIcon.scss";
@@ -319,6 +320,28 @@ export const MobileToolbar = ({ app, setAppState }: MobileToolbarProps) => {
           >
             {t("toolBar.laser")}
           </DropdownMenu.Item>
+          <DropdownMenu.ItemCheckbox
+            checked={app.state.laserToolPersistence}
+            onSelect={() => {
+              const laserToolPersistence = !app.state.laserToolPersistence;
+              app.setAppState({ laserToolPersistence });
+              if (!laserToolPersistence) {
+                app.laserTrails.clearTrails();
+              }
+            }}
+            data-testid="toolbar-laser-persistence"
+          >
+            {t("toolBar.laserPersist")}
+          </DropdownMenu.ItemCheckbox>
+          {app.state.laserToolPersistence && (
+            <DropdownMenu.Item
+              onSelect={() => app.laserTrails.clearTrails()}
+              icon={TrashIcon}
+              data-testid="toolbar-laser-clear"
+            >
+              {t("toolBar.laserClear")}
+            </DropdownMenu.Item>
+          )}
           <DropdownMenu.Item
             onSelect={() => app.setActiveTool({ type: "bucketfill" })}
             icon={bucketFillIcon}

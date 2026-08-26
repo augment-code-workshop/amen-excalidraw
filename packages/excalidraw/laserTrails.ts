@@ -26,6 +26,10 @@ export class LaserTrails implements Trail {
       simplify: 0,
       streamline: 0.4,
       sizeMapping: (c) => {
+        if (this.app.state.laserToolPersistence) {
+          return 1;
+        }
+
         const DECAY_TIME = 1000;
         const DECAY_LENGTH = 50;
         const t = Math.max(
@@ -52,6 +56,10 @@ export class LaserTrails implements Trail {
 
   endPath(): void {
     this.localTrail.endPath();
+  }
+
+  clearTrails(): void {
+    this.localTrail.clearTrails();
   }
 
   start(container: SVGSVGElement) {

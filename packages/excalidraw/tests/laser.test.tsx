@@ -8,7 +8,7 @@ import { getLinkHandleFromCoords } from "../components/hyperlink/helpers";
 
 import { API } from "./helpers/api";
 import { Pointer } from "./helpers/ui";
-import { act, GlobalTestState, render, waitFor } from "./test-utils";
+import { act, fireEvent, GlobalTestState, render, waitFor } from "./test-utils";
 
 import type { Collaborator, ExcalidrawProps, SocketId } from "../types";
 
@@ -170,6 +170,84 @@ describe("laser tool interactions", () => {
     expect(h.state.scrollX).toBe(initialScrollX);
     expect(h.state.scrollY).toBe(initialScrollY);
     expect(GlobalTestState.interactiveCanvas.style.cursor).toContain("");
+  });
+
+  it("keeps the default laser decay behavior", async () => {
+    await render(<Excalidraw />);
+
+    act(() => {
+      h.app.setActiveTool({ type: "laser" });
+    });
+    mouse.downAt(20, 20);
+    mouse.moveTo(80, 80);
+
+    const trail = h.app.laserTrails.localTrail.getCurrentTrail()!;
+    expect(h.state.laserToolPersistence).toBe(false);
+    expect(
+      trail.options.sizeMapping({
+        pressure: performance.now() - 2000,
+        runningLength: 0,
+        currentIndex: 0,
+        totalLength: 0,
+      }),
+    ).toBe(0);
+
+    mouse.upAt(80, 80);
+  });
+
+  it("keeps persistent laser trails until the clear action", async () => {
+    const { container } = await render(<Excalidraw />);
+    const extraToolsTrigger = container.querySelector(
+      ".App-toolbar__extra-tools-trigger",
+    )!;
+
+    fireEvent.click(extraToolsTrigger);
+    const persistenceToggle = await waitFor(() => {
+      const toggle = document.querySelector<HTMLButtonElement>(
+        '[data-testid="toolbar-laser-persistence"]',
+      );
+      expect(toggle).not.toBeNull();
+      return toggle!;
+    });
+    fireEvent.click(persistenceToggle);
+    await waitFor(() => expect(h.state.laserToolPersistence).toBe(true));
+
+    act(() => {
+      h.app.setActiveTool({ type: "laser" });
+    });
+    mouse.downAt(20, 20);
+    mouse.moveTo(80, 80);
+
+    const trail = h.app.laserTrails.localTrail.getCurrentTrail()!;
+    expect(
+      trail.options.sizeMapping({
+        pressure: performance.now() - 2000,
+        runningLength: 0,
+        currentIndex: 0,
+        totalLength: 0,
+      }),
+    ).toBe(1);
+
+    mouse.upAt(80, 80);
+    mouse.downAt(100, 100);
+    mouse.moveTo(160, 160);
+    mouse.upAt(160, 160);
+
+    const svgLayer = document.querySelector(".SVGLayer svg")!;
+    expect(svgLayer.querySelectorAll("path")).toHaveLength(1);
+
+    fireEvent.click(extraToolsTrigger);
+    const clearButton = await waitFor(() => {
+      const button = document.querySelector<HTMLButtonElement>(
+        '[data-testid="toolbar-laser-clear"]',
+      );
+      expect(button).not.toBeNull();
+      return button!;
+    });
+    fireEvent.click(clearButton);
+    await waitFor(() =>
+      expect(svgLayer.querySelectorAll("path")).toHaveLength(0),
+    );
   });
 
   it("cleans up remote laser trails when the last collaborator leaves", async () => {

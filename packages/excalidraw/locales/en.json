@@ -334,6 +334,8 @@
     "magicframe": "Wireframe to code",
     "embeddable": "Web Embed",
     "laser": "Laser pointer",
+    "laserPersist": "Persistent laser",
+    "laserClear": "Clear laser trails",
     "autoshape": "Draw to shape",
     "bucketfill": "Bucket fill",
     "hand": "Hand (panning tool)",

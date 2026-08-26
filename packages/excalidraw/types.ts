@@ -536,6 +536,8 @@ export interface AppState {
   // a drag operation (like pointer position vs bindable element) but needed
   // globally for calculating the binding strategy
   bindMode: BindMode;
+  /** whether local laser trails remain visible until explicitly cleared */
+  laserToolPersistence: boolean;
   /** user-customized color-picker top picks (pinned via drag & drop from the
    * color picker popup). `null` means no customization (defaults, or
    * host-supplied `topPicks`, are used). Kept per picker. */
@@ -1152,6 +1154,7 @@ export type AppClassProperties = {
   requestUnfollow: App["requestUnfollow"];
 
   setAppState: App["setAppState"];
+  laserTrails: App["laserTrails"];
 
   isInteractionEnabled: App["isInteractionEnabled"];
   isNavigationEnabled: App["isNavigationEnabled"];
