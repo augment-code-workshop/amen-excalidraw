@@ -276,6 +276,10 @@ export const Toolbar = ({
         ) : (
           <SelectionToolButton {...toolProps} />
         )}
+        <EraserToolButton
+          {...toolProps}
+          style={{ "--icon-fill-color": "#e66b00" } as React.CSSProperties}
+        />
         <RectangleToolButton {...toolProps} />
         <DiamondToolButton {...toolProps} />
         <EllipseToolButton {...toolProps} />
@@ -288,7 +292,6 @@ export const Toolbar = ({
         )}
         <TextToolButton {...toolProps} />
         {UIOptions.tools?.image !== false && <ImageToolButton {...toolProps} />}
-        <EraserToolButton {...toolProps} />
 
         <div
           className="App-toolbar__divider"
