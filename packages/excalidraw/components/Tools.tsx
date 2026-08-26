@@ -228,6 +228,7 @@ export const isToolButtonDisabled = (app: AppClassProperties, type: string) =>
 export type ToolButtonComponentProps = {
   app: AppClassProperties;
   activeTool: UIAppState["activeTool"];
+  style?: React.CSSProperties;
   /** hide the keybinding badge rendered in the button's corner */
   hideKeyBinding?: boolean;
   /**
@@ -269,6 +270,7 @@ const createToolButton = (
   const ToolButtonComponent = ({
     app,
     activeTool,
+    style,
     hideKeyBinding,
     hideShortcut,
   }: ToolButtonComponentProps) => {
@@ -280,6 +282,7 @@ const createToolButton = (
         className={clsx({ fillable: config.fillable })}
         type="toggle"
         icon={config.icon}
+        style={style}
         checked={activeTool.type === type}
         disabled={isToolButtonDisabled(app, type)}
         title={shortcut ? `${label} — ${shortcut}` : label}

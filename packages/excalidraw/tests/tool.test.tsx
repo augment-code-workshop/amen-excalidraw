@@ -149,6 +149,14 @@ describe("main toolbar", () => {
       "toolbar-text",
       "toolbar-image",
     ]);
+
+    const eraserButton =
+      GlobalTestState.renderResult.container.querySelector<HTMLElement>(
+        '[data-testid="toolbar-eraser"]',
+      )!;
+    expect(eraserButton.style.getPropertyValue("--icon-fill-color")).toBe(
+      "#ff7a00",
+    );
   });
 });
 
