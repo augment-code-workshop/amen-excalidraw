@@ -278,7 +278,7 @@ export const Toolbar = ({
         )}
         <EraserToolButton
           {...toolProps}
-          style={{ "--icon-fill-color": "#ff7a00" } as React.CSSProperties}
+          style={{ "--icon-fill-color": "#e66b00" } as React.CSSProperties}
         />
         <RectangleToolButton {...toolProps} />
         <DiamondToolButton {...toolProps} />

@@ -155,7 +155,7 @@ describe("main toolbar", () => {
         '[data-testid="toolbar-eraser"]',
       )!;
     expect(eraserButton.style.getPropertyValue("--icon-fill-color")).toBe(
-      "#ff7a00",
+      "#e66b00",
     );
   });
 });
